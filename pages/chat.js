@@ -22,14 +22,16 @@ export default function ChatPage() {
         ) : (
           <div className="aspect-w-16 aspect-h-9">
             <div className="relative pb-[56.25%] h-0 overflow-hidden max-w-full">
-              <iframe 
+              <video 
                 className="absolute top-0 left-0 w-full h-full"
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
-                title="Elon Musk AI Demo"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
+                controls
+                autoPlay
+                playsInline
+                preload="auto"
+              >
+                <source src="/Elon chat.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
             </div>
           </div>
         )}
