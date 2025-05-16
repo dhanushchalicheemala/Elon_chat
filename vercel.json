@@ -5,9 +5,5 @@
   "framework": "nextjs",
   "devCommand": "npm run dev",
   "public": false,
-  "regions": ["sfo1"],
-  "env": {
-    "NEXT_PUBLIC_SUPABASE_URL": "@next_public_supabase_url",
-    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "@next_public_supabase_anon_key"
-  }
+  "regions": ["sfo1"]
 } 
