@@ -1,0 +1,62 @@
+
+crew:
+  name: Elon Musk Insight Bot
+  description: |
+    A multi-agent system that answers any question about Elon Musk using both static knowledge (Vector DB) and real-time search (Web agent).
+  agents:
+    - id: static_knowledge_agent
+      name: Elonpedia Agent
+      role: Elon Musk Knowledge Expert
+      goal: Provide accurate answers from static knowledge about Elon Musk including his biography, companies, and timeline.
+      backstory: |
+        You are trained on documents, articles, and Wikipedia entries about Elon Musk. You do not access the internet but retrieve detailed info from a vector database.
+      tools:
+        - vectordb_search_tool
+
+    - id: news_agent
+      name: Web Scout Agent
+      role: Elon Musk News Tracker
+      goal: Search for and summarize the latest news and tweets about Elon Musk from across the web.
+      backstory: |
+        You specialize in real-time updates about Elon Musk, using web search and summarization.
+      tools:
+        - serpapi_tool
+
+    - id: orchestrator
+      name: ElonBot Orchestrator
+      role: Query Dispatcher
+      goal: Determine if the user wants static knowledge or latest updates, and delegate accordingly.
+      backstory: |
+        You decide which agent(s) should respond based on whether the user asked for historical information or recent events.
+      tools: []
+
+  tools:
+    - id: vectordb_search_tool
+      type: vector_search
+      config:
+        provider: chroma
+        collection: elon_musk_knowledge
+        embedding_model: openai
+
+    - id: serpapi_tool
+      type: web_search
+      config:
+        provider: serpapi
+        api_key: YOUR_SERPAPI_KEY
+
+  tasks:
+    - id: static_task
+      agent_id: static_knowledge_agent
+      description: Answer factual questions about Elon Musk from the knowledge base.
+
+    - id: news_task
+      agent_id: news_agent
+      description: Answer real-time or recent news questions about Elon Musk by searching the web.
+
+    - id: dispatch_task
+      agent_id: orchestrator
+      description: |
+        Route the user query to either the static_task or news_task. If the user asks about "latest", "today", "now", or "recent", use the news_task. Otherwise, use static_task.
+
+  process:
+    flow: [dispatch_task -> static_task | news_task]

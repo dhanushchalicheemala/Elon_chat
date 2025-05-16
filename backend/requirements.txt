@@ -1,0 +1,11 @@
+fastapi
+uvicorn[standard]
+crewai
+crewai-tools
+python-dotenv
+langchain-openai
+langchain-community
+chromadb
+# If you intend to use SerpApi for web searches directly (SerperDevTool uses it via serper.dev)
+# you might need a specific serpapi client, but SerperDevTool handles its own.
+# serpapi-python-client # Usually not needed if using SerperDevTool 
