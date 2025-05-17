@@ -1,69 +1,79 @@
 # Elon Musk AI Chatbot
 
-A chatbot that answers questions about Elon Musk using AI.
+A Next.js application that allows users to chat with an AI trained on Elon Musk's knowledge, tweets, and interviews.
 
 ## Features
 
-- Landing page with waitlist signup
-- AI-powered chatbot based on Elon Musk's knowledge
-- User authentication (coming soon)
-- Real-time news and updates
+- Chat with an AI trained on Elon Musk's knowledge
+- Real-time responses powered by OpenAI
+- Authentication using Supabase with Google OAuth
+- Modern UI with Tailwind CSS
 
-## Getting Started
+## Setup Instructions
 
-### Prerequisites
+### 1. Clone the repository
 
-- Node.js 14+ and npm
-- A Supabase account
+```bash
+git clone <repository-url>
+cd ElonMuskCrewAIChatbot
+```
 
-### Installation
+### 2. Install dependencies
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/dhanushchalicheemala/Elon_chat.git
-   cd Elon_chat
-   ```
+```bash
+npm install
+```
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+### 3. Set up Supabase
 
-3. Create a `.env.local` file in the root directory with the following variables:
-   ```
-   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url_here
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key_here
-   ```
+1. Create a Supabase project at https://supabase.com
+2. Enable Google OAuth:
+   - Go to Authentication > Providers > Google
+   - Set up a Google Cloud project and configure OAuth credentials
+   - Add your domain to the authorized origins
+   - Add your callback URL: `https://your-supabase-project.supabase.co/auth/v1/callback`
 
-4. Set up your Supabase project:
-   - Create a new project in Supabase
-   - In SQL Editor, create a waitlist table with the following SQL command:
+### 4. Set up environment variables
 
-   ```sql
-   CREATE TABLE waitlist (
-     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-     name TEXT NOT NULL,
-     email TEXT NOT NULL UNIQUE,
-     signed_up_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-     status TEXT DEFAULT 'pending'
-   );
-   ```
+Create a `.env.local` file in the root directory with the following variables:
 
-5. Run the development server:
-   ```bash
-   npm run dev
-   ```
+```
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=your-supabase-project-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
 
-6. Open [http://localhost:3000](http://localhost:3000) in your browser.
+# Backend API
+BACKEND_URL=http://localhost:8000
+```
 
-## Pages
+### 5. Start the backend server
 
-- `/` - Landing page with waitlist signup
-- `/chat` - The main chat interface with the Elon Musk AI
+```bash
+cd backend
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+python main.py
+```
 
-## Tech Stack
+### 6. Run the Next.js application
+
+```bash
+npm run dev
+```
+
+The application should now be running at http://localhost:3000
+
+## Usage
+
+1. Visit the website and click on "Use Chat"
+2. If not logged in, you'll be prompted to sign in with Google
+3. Once authenticated, you can start chatting with the Elon Musk AI
+
+## Technologies Used
 
 - Next.js - Frontend framework
+- Supabase - Authentication and database
 - Tailwind CSS - Styling
-- Supabase - Database and authentication
-- CrewAI - AI orchestration 
+- CrewAI - AI agents and tasks
+- OpenAI - AI model provider 

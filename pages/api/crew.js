@@ -1,56 +1,50 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 
+import { supabase } from '../../lib/supabase';
+
 export default async function handler(req, res) {
-  if (req.method === 'POST') {
-    const { message } = req.body;
-    console.log('Frontend received message:', message);
+  // Only allow POST requests
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
 
-    try {
-      // Call the Python backend
-      // Ensure your Python backend is running, typically on http://localhost:8000
-      const pythonBackendUrl = process.env.PYTHON_BACKEND_URL || 'http://127.0.0.1:8000/run-crew/';
-      
-      console.log(`Forwarding message to Python backend at ${pythonBackendUrl}`);
-      
-      // More robust error handling for fetch
-      try {
-        const response = await fetch(pythonBackendUrl, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ message }),
-        });
-
-        if (!response.ok) {
-          const errorBody = await response.text();
-          console.error('Python backend error:', response.status, errorBody);
-          throw new Error(`Python backend responded with ${response.status}: ${errorBody}`);
-        }
-
-        const data = await response.json();
-        console.log('Received reply from Python backend:', data.reply);
-        res.status(200).json({ reply: data.reply });
-      } catch (fetchError) {
-        console.error('Network error with Python backend:', fetchError.message);
-        
-        // Check if it's a connection refused error
-        if (fetchError.message.includes('ECONNREFUSED') || fetchError.message.includes('Failed to fetch')) {
-          res.status(503).json({ 
-            reply: "Sorry, the AI backend appears to be offline. Please ensure the Python backend is running on port 8000."
-          });
-        } else {
-          res.status(500).json({ 
-            reply: `Backend connection error: ${fetchError.message}`
-          });
-        }
-      }
-    } catch (error) {
-      console.error('General error handling request:', error);
-      res.status(500).json({ reply: "Sorry, I couldn't connect to the AI crew or an internal error occurred." });
+  try {
+    // Check for authentication
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (!session) {
+      return res.status(401).json({ error: 'Unauthorized - Please log in' });
     }
-  } else {
-    res.setHeader('Allow', ['POST']);
-    res.status(405).end(`Method ${req.method} Not Allowed`);
+
+    // Extract the message from the request body
+    const { message } = req.body;
+    
+    if (!message || typeof message !== 'string') {
+      return res.status(400).json({ error: 'Invalid request - message is required and must be a string' });
+    }
+
+    // Forward request to the backend
+    const backendUrl = process.env.BACKEND_URL || 'http://localhost:8000';
+    const response = await fetch(`${backendUrl}/run-crew/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ message }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.detail || 'Backend API request failed');
+    }
+
+    const data = await response.json();
+    return res.status(200).json(data);
+  } catch (error) {
+    console.error('Error processing request:', error);
+    return res.status(500).json({ 
+      error: 'Failed to process your request',
+      details: error.message
+    });
   }
 } 

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Link from 'next/link';
 
 export default function LandingPage() {
   const [email, setEmail] = useState('');
@@ -68,7 +69,16 @@ export default function LandingPage() {
                 Get the latest updates on Elon's ventures
               </li>
             </ul>
-            <p className="text-gray-300 italic">Powered by AI and backed by the latest data</p>
+            <p className="text-gray-300 italic mb-8">Powered by AI and backed by the latest data</p>
+            
+            <Link href="/chat">
+              <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-lg transition-colors text-lg flex items-center justify-center">
+                <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                </svg>
+                Try Chat Now
+              </button>
+            </Link>
           </div>
           
           <div className="md:w-1/2 p-8">
@@ -78,7 +88,13 @@ export default function LandingPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <h2 className="text-2xl font-bold mb-2">You're on the list!</h2>
-                <p className="text-gray-600">Thanks for joining our waitlist. We'll notify you as soon as we launch.</p>
+                <p className="text-gray-600 mb-6">Thanks for joining our waitlist. We'll notify you as soon as we launch.</p>
+                
+                <Link href="/chat">
+                  <button className="bg-black hover:bg-gray-800 text-white font-bold py-3 px-8 rounded-lg transition duration-200">
+                    Try Chat Now
+                  </button>
+                </Link>
               </div>
             ) : (
               <>
@@ -116,11 +132,20 @@ export default function LandingPage() {
                   
                   <button
                     type="submit"
-                    className="w-full bg-black hover:bg-gray-800 text-white font-bold py-3 px-4 rounded-lg transition duration-200"
+                    className="w-full bg-black hover:bg-gray-800 text-white font-bold py-3 px-4 rounded-lg transition duration-200 mb-4"
                     disabled={loading}
                   >
                     {loading ? 'Processing...' : 'Join Waitlist'}
                   </button>
+                  
+                  <div className="text-center">
+                    <span className="text-gray-500">or</span>
+                    <Link href="/chat">
+                      <div className="block mt-3 text-blue-600 hover:underline cursor-pointer">
+                        Try the chat directly
+                      </div>
+                    </Link>
+                  </div>
                 </form>
               </>
             )}
