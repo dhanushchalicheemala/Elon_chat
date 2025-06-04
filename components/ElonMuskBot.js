@@ -90,7 +90,9 @@ export default function ElonMuskBot() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to get response");
+        const errorData = await response.json();
+        console.error("API error:", errorData);
+        throw new Error(errorData.error || errorData.details || "Failed to get response");
       }
 
       const { reply } = await response.json();
@@ -103,7 +105,7 @@ export default function ElonMuskBot() {
       console.error("Error sending message:", error);
       setMessages([
         ...newMessages,
-        { role: "assistant", text: "Sorry, there was an error processing your request. Please try again later." },
+        { role: "assistant", text: "Sorry, there was an error processing your request. Please try again later. Error: " + error.message },
       ]);
     } finally {
       setIsProcessing(false);

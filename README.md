@@ -1,13 +1,19 @@
 # Elon Musk AI Chatbot
 
-A Next.js application that allows users to chat with an AI trained on Elon Musk's knowledge, tweets, and interviews.
+A Next.js application that allows users to chat with an AI trained on Elon Musk's knowledge, tweets, and interviews. This project uses CrewAI to create an intelligent agent that simulates conversations with Elon Musk based on his public statements, interviews, and tweets.
+
+## Demo
+
+![Elon Musk Chat Demo](elon%20chat.gif)
 
 ## Features
 
-- Chat with an AI trained on Elon Musk's knowledge
-- Real-time responses powered by OpenAI
+- Chat with an AI trained on Elon Musk's knowledge and personality
+- Real-time responses powered by OpenAI's language models
+- Multi-agent AI system using CrewAI framework
 - Authentication using Supabase with Google OAuth
-- Modern UI with Tailwind CSS
+- Responsive modern UI built with Tailwind CSS
+- Persistent chat history
 
 ## Setup Instructions
 
@@ -72,8 +78,22 @@ The application should now be running at http://localhost:3000
 
 ## Technologies Used
 
-- Next.js - Frontend framework
-- Supabase - Authentication and database
-- Tailwind CSS - Styling
-- CrewAI - AI agents and tasks
-- OpenAI - AI model provider 
+- **Frontend**: 
+  - Next.js (React framework)
+  - Tailwind CSS for styling
+  - React hooks for state management
+  
+- **Backend**:
+  - Python with FastAPI
+  - CrewAI for creating intelligent agents
+  - OpenAI's GPT models for natural language processing
+  
+- **Authentication & Database**:
+  - Supabase for user authentication with Google OAuth
+  - Supabase PostgreSQL database for storing chat history
+
+## Project Structure
+
+The project consists of two main parts:
+1. **Frontend**: Next.js application for the user interface
+2. **Backend**: Python API that handles the AI agent communication using CrewAI

@@ -23,8 +23,11 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Invalid request - message is required and must be a string' });
     }
 
-    // Forward request to the backend
+    // Get the backend URL from environment variables with fallback
     const backendUrl = process.env.BACKEND_URL || 'http://localhost:8000';
+    console.log('Using backend URL:', backendUrl);
+    
+    // Forward request to the backend
     const response = await fetch(`${backendUrl}/run-crew/`, {
       method: 'POST',
       headers: {
@@ -33,9 +36,13 @@ export default async function handler(req, res) {
       body: JSON.stringify({ message }),
     });
 
+    // Log response status for debugging
+    console.log('Backend response status:', response.status);
+    
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.detail || 'Backend API request failed');
+      console.error('Backend error details:', errorData);
+      throw new Error(errorData.error || errorData.detail || 'Backend API request failed');
     }
 
     const data = await response.json();
@@ -44,7 +51,8 @@ export default async function handler(req, res) {
     console.error('Error processing request:', error);
     return res.status(500).json({ 
       error: 'Failed to process your request',
-      details: error.message
+      details: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
     });
   }
 } 
